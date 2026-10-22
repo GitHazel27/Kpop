@@ -78,10 +78,9 @@ main {
 
 .chat-window {
   width: min(350px, calc(100vw - 32px));
-  min-height: 180px;
-  max-height: min(500px, calc(100vh - 110px));
-  overflow-y: auto;
-  padding: 16px;
+  height: min(460px, calc(100vh - 110px));
+  min-height: 240px;
+  overflow: hidden;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
   background: #fff;
