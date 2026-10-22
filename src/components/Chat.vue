@@ -27,8 +27,6 @@ const onMessage = (text: string) => {
     </div>
 
     <ChatMessages :messages="messages"/>
-    <!-- Notación de tipo kebab-case -->
-    <!-- Incluimos el método capturando el evento -->
     <MessageBox @send-message="onMessage($event)"/>
 
     

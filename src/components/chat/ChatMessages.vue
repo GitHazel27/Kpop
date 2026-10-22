@@ -10,17 +10,10 @@ defineProps<Props>();
 <template>
     <div class="chat-messages">
         <div class="chat-messages-list">
-        <!-- Messages go here -->
-        <!-- Example Message -->
          <Bubble
          v-for="message in messages" 
          :key="message.id" 
          v-bind="message" />
-        <!-- 
-         El v-bind sustituye todo lo que se tiene en la parte de abajo
-         :its-mine="message.itsMine" 
-         :message="message.message" 
-         :image="message.image"-->
         </div>
     </div>
 </template>

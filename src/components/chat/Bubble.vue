@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <!-- Example Received Message -->
+    <!-- Received Message -->
     <div class="chat-message chat-message--received">
         <div class="chat-bubble chat-bubble--received">
         <span class="capitalize">{{ message }}</span>
