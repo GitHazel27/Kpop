@@ -16,7 +16,7 @@
     </div>
 
     <!-- Received Message -->
-    <div class="chat-message chat-message--received">
+    <div v-else class="chat-message chat-message--received">
         <div class="chat-bubble chat-bubble--received">
         <span class="capitalize">{{ message }}</span>
         </div>

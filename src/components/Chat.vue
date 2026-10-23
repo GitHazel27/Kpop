@@ -28,12 +28,18 @@ const suggestedQuestions: SuggestedQuestion[] = [
   }
 ]
 
+
 const messages = ref<ChatMessage[]>([])
 const showSuggestedQuestions = ref(true)
 let nextId = 0
 
 const addMessage = (message: string, itsMine: boolean) => {
   messages.value.push({ id: nextId++, message, itsMine })
+}
+
+const sendAndEcho = (text: string) => {
+  addMessage(text, true)
+  addMessage(text, false)
 }
 
 const onSuggestedQuestion = ({ question, answer }: SuggestedQuestion) => {
@@ -63,7 +69,7 @@ addMessage('¡Annyeong! Soy Maknae Bot, ¿en qué puedo ayudarte hoy? 🫰', fal
       </button>
     </div>
 
-    <MessageBox @send-message="addMessage($event, true)" />
+    <MessageBox @send-message="sendAndEcho($event)" />
   </div>
 </template>
 
