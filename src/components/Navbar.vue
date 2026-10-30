@@ -6,7 +6,16 @@
         <label class="menu-toggle" for="menu-toggle" aria-hidden="true">☰</label>
           <div class="nav-menu">
             <RouterLink class="nav-link" :to="{ name: 'inicio' }">Inicio</RouterLink>
-            <RouterLink class="nav-link" to="/artistas">Mis Favs</RouterLink>
+            <div class="dropdown"
+            @mouseenter="showFavs=true"
+            @mouseleave="showFavs=false">
+              <span class="nav-link">Mis Favs</span>
+              <div v-if="showFavs" class="dropdown-content">
+                <RouterLink v-for="grupo in topGrupos":key="grupo.id":to="`/grupos/${grupo.id}`"class="dropdown-group">
+                  {{ grupo.nombre}}
+                </RouterLink>
+              </div>
+            </div>
             <RouterLink class="nav-link" to="/knews">K-news</RouterLink>
             <RouterLink class="nav-link" to="/merch">Merch</RouterLink>
             <RouterLink class="nav-link" to="/eventos">Eventos</RouterLink>
@@ -30,6 +39,13 @@
     </section>
   </header>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+const showFavs = ref(false)
+import {group} from '@/data/grupos';
+const topGrupos = group.slice(0,3);
+</script>
 
 <style scoped>
 .site-header {
@@ -66,6 +82,98 @@
 .nav-link {
   color: #fff;
   font-weight: 500;
+}
+
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown > .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.dropdown > .nav-link::after {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  content: "";
+  transform: translateY(-0.15rem) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.dropdown:hover > .nav-link::after {
+  transform: translateY(0.05rem) rotate(225deg);
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 10;
+  min-width: 11rem;
+  padding: 0.45rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 0.85rem;
+  background: #211b30;
+  box-shadow: 0 0.75rem 1.75rem rgb(0 0 0 / 30%);
+  transform: translateX(-50%);
+  animation: dropdown-appear 0.16s ease-out;
+}
+
+.dropdown-content .nav-link {
+  display: block;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.55rem;
+  white-space: nowrap;
+}
+
+.dropdown-content .nav-link:hover {
+  background: rgb(247 125 214 / 12%);
+}
+
+.dropdown-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.55rem;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease, padding-left 0.2s ease;
+}
+
+.dropdown-group:hover,
+.dropdown-group:focus-visible,
+.dropdown-group.router-link-active {
+  padding-left: 1rem;
+  background: rgb(247 125 214 / 12%);
+  color: #f4a7df;
+}
+
+.dropdown-group:focus-visible {
+  outline: 2px solid #f4a7df;
+  outline-offset: -2px;
+}
+
+@keyframes dropdown-appear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -0.3rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .nav-sesion {
@@ -169,6 +277,37 @@ h4{
 
   .nav-link {
     padding: 0.65rem 0;
+  }
+
+  .dropdown {
+    display: block;
+  }
+
+  .dropdown-content {
+    position: static;
+    min-width: 0;
+    padding: 0 0 0.25rem 0.75rem;
+    border: 0;
+    border-left: 2px solid rgb(247 125 214 / 55%);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    animation: none;
+  }
+
+  .dropdown-content .nav-link {
+    padding: 0.55rem 0.75rem;
+  }
+
+  .dropdown-group {
+    padding: 0.55rem 0.75rem;
+  }
+
+  .dropdown-group:hover,
+  .dropdown-group:focus-visible,
+  .dropdown-group.router-link-active {
+    padding-left: 0.9rem;
   }
 
   .nav-sesion {

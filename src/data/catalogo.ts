@@ -1,6 +1,7 @@
 export interface catalogo {
     id: number;
     categoria: string;
+    idgrupo: number;
     grupo: string;
     titulo: string;
     precio: string;
@@ -12,6 +13,7 @@ export const catalogo: catalogo[] = [
     {
         id: 1,
         categoria: 'Album',
+        idgrupo: 1,
         grupo: 'Stray Kids',
         titulo: 'Stray Kids - SKZ IT TAPE [DO IT] (IT ver.)',
         precio: '$570.00',
