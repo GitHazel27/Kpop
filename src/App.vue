@@ -2,65 +2,77 @@
 import { ref } from 'vue'
 import Navbar from './components/Navbar.vue'
 import Chat from './components/Chat.vue'
+import Footer from './components/Footer.vue'
 
 const isChatOpen = ref(false)
+//feature
 </script>
 
 <template>
-  <Navbar />
-  <main>
-    <RouterView />
-  </main>
+  <div class="app-shell">
+    <Navbar />
+    <main>
+      <RouterView />
+    </main>
+    <Footer />
 
-  <section class="chat-widget" aria-label="Chat">
-    <div v-if="isChatOpen" class="chat-window">
-      <Chat />
-    </div>
-    <button
-      class="chat-toggle"
-      type="button"
-      :aria-expanded="isChatOpen"
-      :aria-label="isChatOpen ? 'Cerrar chat' : 'Abrir chat'"
-      @click="isChatOpen = !isChatOpen"
-    >
-      <svg
-        v-if="!isChatOpen"
-        viewBox="0 0 24 24"
-        width="26"
-        height="26"
-        fill="none"
-        aria-hidden="true"
+    <section class="chat-widget" aria-label="Chat">
+      <div v-if="isChatOpen" class="chat-window">
+        <Chat />
+      </div>
+      <button
+        class="chat-toggle"
+        type="button"
+        :aria-expanded="isChatOpen"
+        :aria-label="isChatOpen ? 'Cerrar chat' : 'Abrir chat'"
+        @click="isChatOpen = !isChatOpen"
       >
-        <path
-          d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.7-3.4A7.5 7.5 0 1 1 20 11.5Z"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-      <svg
-        v-else
-        viewBox="0 0 24 24"
-        width="26"
-        height="26"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="m6 6 12 12M18 6 6 18"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-        />
-      </svg>
-    </button>
-  </section>
+        <svg
+          v-if="!isChatOpen"
+          viewBox="0 0 24 24"
+          width="26"
+          height="26"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.7-3.4A7.5 7.5 0 1 1 20 11.5Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <svg
+          v-else
+          viewBox="0 0 24 24"
+          width="26"
+          height="26"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="m6 6 12 12M18 6 6 18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </section>
+  </div>
 </template>
 
 <style scoped>
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 main {
   width: 100%;
+  flex: 1;
   padding: 0 2rem;
   margin: 3rem 0;
 }

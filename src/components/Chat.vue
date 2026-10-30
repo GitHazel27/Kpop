@@ -28,7 +28,6 @@ const suggestedQuestions: SuggestedQuestion[] = [
   }
 ]
 
-
 const messages = ref<ChatMessage[]>([])
 const showSuggestedQuestions = ref(true)
 let nextId = 0

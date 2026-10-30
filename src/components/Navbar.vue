@@ -6,9 +6,9 @@
         <label class="menu-toggle" for="menu-toggle" aria-hidden="true">☰</label>
           <div class="nav-menu">
             <RouterLink class="nav-link" :to="{ name: 'inicio' }">Inicio</RouterLink>
+            <RouterLink class="nav-link" to="/artistas">Mis Favs</RouterLink>
             <RouterLink class="nav-link" to="/knews">K-news</RouterLink>
             <RouterLink class="nav-link" to="/merch">Merch</RouterLink>
-            <RouterLink class="nav-link" to="/artistas">Artistas</RouterLink>
             <RouterLink class="nav-link" to="/eventos">Eventos</RouterLink>
             <RouterLink class="nav-sesion" to="/sesion">
               <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +26,7 @@
           </div>
     </nav>
     <section class="nav-message">
-      <h4>Envíos a todo méxico</h4>
+      <h4>Merch 100% original con envíos a todo méxico</h4>
     </section>
   </header>
 </template>
