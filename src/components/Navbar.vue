@@ -5,7 +5,14 @@
       <input class="menu-toggle-input" id="menu-toggle" type="checkbox" aria-label="Abrir o cerrar menú">
         <label class="menu-toggle" for="menu-toggle" aria-hidden="true">☰</label>
           <div class="nav-menu">
-            <RouterLink class="nav-link" :to="{ name: 'inicio' }">Inicio</RouterLink>
+            <RouterLink
+              class="nav-link"
+              :class="{ 'nav-link-current': route.name === 'inicio' && route.hash !== '#knews' }"
+              :to="{ name: 'inicio' }"
+              active-class="nav-link-route-active"
+            >
+              Inicio
+            </RouterLink>
             <div class="dropdown"
             @mouseenter="showFavs=true"
             @mouseleave="showFavs=false">
@@ -16,7 +23,14 @@
                 </RouterLink>
               </div>
             </div>
-            <RouterLink class="nav-link" to="/knews">K-news</RouterLink>
+            <RouterLink
+              class="nav-link"
+              :class="{ 'nav-link-current': route.name === 'inicio' && route.hash === '#knews' }"
+              :to="{ name: 'inicio', hash: '#knews' }"
+              active-class="nav-link-route-active"
+            >
+              K-news
+            </RouterLink>
             <RouterLink class="nav-link" to="/merch">Merch</RouterLink>
             <RouterLink class="nav-link" to="/eventos">Eventos</RouterLink>
             <RouterLink class="nav-sesion" to="/sesion">
@@ -42,6 +56,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
 const showFavs = ref(false)
 import {group} from '@/data/grupos';
 const topGrupos = group.slice(0,3);
@@ -204,13 +220,13 @@ const topGrupos = group.slice(0,3);
 
 .brand:hover,
 .nav-link:hover,
-.nav-link.router-link-active,
+.nav-link-current,
 .nav-cart.router-link-active,
 .nav-sesion.router-link-active {
   color: #f42c84;
 }
 
-.nav-link.router-link-active {
+.nav-link-current {
   font-weight: 600;
 }
 

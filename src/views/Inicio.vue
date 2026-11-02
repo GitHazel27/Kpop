@@ -47,10 +47,12 @@
       </RouterLink>
     </div>
   </section>
+  <Knews />
 </template>
 
 <script setup lang="ts">
 import {group} from '@/data/grupos';
+import Knews from '@/views/Knews.vue';
 
 const topGrupos = group.slice(0, 3);
 </script>
@@ -207,8 +209,9 @@ const topGrupos = group.slice(0, 3);
 .favs h2 {
   margin: 0;
   color: #171321;
-  font-size: clamp(1.6rem, 4vw, 2.25rem);
-  font-weight: 700;
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.1;
 }
 
 .favs-intro {
