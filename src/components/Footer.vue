@@ -11,7 +11,7 @@
           <h2>Explora</h2>
           <nav class="footer-nav" aria-label="Navegación del pie de página">
             <RouterLink :to="{ name: 'inicio' }">Inicio</RouterLink>
-            <RouterLink :to="{ name: 'artistas' }">Mis Favs</RouterLink>
+            <RouterLink :to="{ name: 'grupos' }">Mis Favs</RouterLink>
             <RouterLink :to="{ name: 'knews' }">K-news</RouterLink>
             <RouterLink :to="{ name: 'merch' }">Merch</RouterLink>
             <RouterLink :to="{ name: 'eventos' }">Eventos</RouterLink>

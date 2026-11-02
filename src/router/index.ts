@@ -13,7 +13,7 @@ const routes = [
     {path: '/cart' ,name:'cart' ,component: Cart},
     {path: '/knews' ,name:'knews' ,component: Knews},
     {path: '/merch' ,name:'merch' ,component: Merch},
-    {path: '/artistas' ,name:'artistas' ,component: Artistas},
+    {path: '/grupos' ,name:'grupos' ,component: Artistas},
     {path: '/eventos' ,name:'eventos' ,component: Eventos}
   ]
   

@@ -20,7 +20,15 @@
     </div>
   </section>
   <section class="favs">
-    <h2>Mi top 3</h2>
+    <div class="favs-heading">
+      <div>
+        <h2>Mi Favs</h2>
+        <p class="favs-intro">
+          Descubre nuevos grupos, encuentra tu próximo favorito.
+        </p>
+      </div>
+      <RouterLink class="more-button" :to="{ name: 'grupos' }">Ver más</RouterLink>
+    </div>
     <div class="top-groups">
       <RouterLink
         v-for="grupo in topGrupos"
@@ -38,7 +46,6 @@
         <span class="group-name">{{ grupo.nombre }}</span>
       </RouterLink>
     </div>
-    <RouterLink class="more-button" :to="{ name: 'inicio' }">Ver más</RouterLink>
   </section>
 </template>
 
@@ -185,34 +192,46 @@ const topGrupos = group.slice(0, 3);
 .favs {
   width: calc(100% + 4rem);
   margin-left: -2rem;
-  padding: 2rem 1.5rem 2.5rem;
-  background: linear-gradient(135deg, #fff0fa, #f8e6f5);
+  padding: 2rem clamp(1.5rem, 5vw, 4rem) 2.5rem;
+  background: #f8eef5;
+}
+
+.favs-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
 }
 
 .favs h2 {
-  margin: 0 0 1.75rem;
+  margin: 0;
   color: #171321;
   font-size: clamp(1.6rem, 4vw, 2.25rem);
   font-weight: 700;
-  text-align: center;
+}
+
+.favs-intro {
+  margin: 0.35rem 0 0;
+  color: #625a68;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .top-groups {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3vw, 3rem);
 }
 
 .group-card {
   position: relative;
   display: flex;
-  flex: 0 1 clamp(11rem, 22vw, 15rem);
-  aspect-ratio: 1;
+  height: clamp(12rem, 18vw, 16rem);
   overflow: hidden;
   align-items: flex-end;
-  border: 1px solid rgb(23 19 33 / 10%);
-  border-radius: 50%;
+  border: 0;
+  border-radius: 1rem;
   background: #211b30;
   color: #fff;
   text-decoration: none;
@@ -291,9 +310,10 @@ const topGrupos = group.slice(0, 3);
 }
 
 .more-button {
-  display: block;
+  display: inline-flex;
   width: fit-content;
-  margin: 1.75rem auto 0;
+  flex: 0 0 auto;
+  align-items: center;
   padding: 0.7rem 1.5rem;
   border: 1px solid #f42c84;
   border-radius: 999px;
@@ -335,8 +355,21 @@ const topGrupos = group.slice(0, 3);
     padding: 1.5rem 1rem 2rem;
   }
 
+  .favs-heading {
+    margin-bottom: 1.25rem;
+  }
+
+  .more-button {
+    padding: 0.6rem 1rem;
+  }
+
+  .top-groups {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
   .group-card {
-    flex-basis: min(72vw, 14rem);
+    height: 13rem;
   }
 }
 </style>
