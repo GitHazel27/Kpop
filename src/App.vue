@@ -107,7 +107,7 @@ main {
   place-items: center;
   border: 0;
   border-radius: 50%;
-  background: #f4a7df;
+  background: #f42c84;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 4px 14px rgb(0 0 0 / 22%);
@@ -116,11 +116,11 @@ main {
 
 .chat-toggle:hover {
   transform: translateY(-2px);
-  background: #f4a7df;
+  background: #d91c6c;
 }
 
 .chat-toggle:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid #f42c84;
   outline-offset: 3px;
 }
 

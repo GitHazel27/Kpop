@@ -81,7 +81,7 @@
 }
 
 .brand {
-  color: #fff;
+  color: #f42c84;
   font-size: 1.8rem;
   font-weight: 900;
   letter-spacing: 0.1em;
@@ -89,7 +89,7 @@
 }
 
 .brand span {
-  color: #f4a7df;
+  color: #f42c84;
 }
 
 .tagline {
@@ -124,7 +124,11 @@ h2 {
 .footer-nav a:focus-visible,
 .footer-bottom a:hover,
 .footer-bottom a:focus-visible {
-  color: #f4a7df;
+  color: #f42c84;
+}
+
+.brand:hover {
+  color: #f42c84;
 }
 
 .social-links {
@@ -146,8 +150,8 @@ h2 {
 
 .social-links a:hover {
   transform: translateY(-3px);
-  border-color: #f4a7df;
-  background: #f4a7df;
+  border-color: #f42c84;
+  background: #f42c84;
   color: #171321;
 }
 
@@ -155,7 +159,7 @@ h2 {
 .footer-nav a:focus-visible,
 .footer-bottom a:focus-visible,
 .brand:focus-visible {
-  outline: 2px solid #f4a7df;
+  outline: 2px solid #f42c84;
   outline-offset: 4px;
 }
 
@@ -185,7 +189,7 @@ h2 {
 }
 
 .footer-bottom a span {
-  color: #f4a7df;
+  color: #f42c84;
 }
 
 @media (max-width: 760px) {

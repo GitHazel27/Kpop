@@ -143,7 +143,7 @@ h1 {
 
 .mode-switch button.active {
   background: #fff;
-  color: #8c286e;
+  color: #f42c84;
   box-shadow: 0 2px 8px rgb(23 19 33 / 10%);
 }
 
@@ -168,8 +168,8 @@ h1 {
 }
 
 .field input:focus {
-  border-color: #a23883;
-  outline: 3px solid rgb(162 56 131 / 18%);
+  border-color: #f42c84;
+  outline: 3px solid rgb(244 44 132 / 18%);
 }
 
 .submit-button {
@@ -178,7 +178,7 @@ h1 {
   margin-top: 1.5rem;
   border: 0;
   border-radius: 0.65rem;
-  background: #a23883;
+  background: #f42c84;
   color: #fff;
   cursor: pointer;
   font: inherit;
@@ -186,12 +186,12 @@ h1 {
 }
 
 .submit-button:hover {
-  background: #842768;
+  background: #d91c6c;
 }
 
 .submit-button:focus-visible,
 .mode-switch button:focus-visible {
-  outline: 3px solid #f4a7df;
+  outline: 3px solid #f42c84;
   outline-offset: 3px;
 }
 

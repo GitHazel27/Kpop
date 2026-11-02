@@ -49,6 +49,9 @@ const topGrupos = group.slice(0,3);
 
 <style scoped>
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   background: #171321;
   color: #fff;
 }
@@ -73,7 +76,7 @@ const topGrupos = group.slice(0,3);
 }
 
 .brand {
-  color: #f4a7df;
+  color: #f42c84;
   font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -156,11 +159,11 @@ const topGrupos = group.slice(0,3);
 .dropdown-group.router-link-active {
   padding-left: 1rem;
   background: rgb(247 125 214 / 12%);
-  color: #f4a7df;
+  color: #f42c84;
 }
 
 .dropdown-group:focus-visible {
-  outline: 2px solid #f4a7df;
+  outline: 2px solid #f42c84;
   outline-offset: -2px;
 }
 
@@ -184,7 +187,7 @@ const topGrupos = group.slice(0,3);
 
 .nav-sesion:hover,
 .nav-cart:hover {
-  color: #f77dd6;
+  color: #f42c84;
 }
 
 .nav-cart {
@@ -204,7 +207,7 @@ const topGrupos = group.slice(0,3);
 .nav-link.router-link-active,
 .nav-cart.router-link-active,
 .nav-sesion.router-link-active {
-  color: #f77dd6;
+  color: #f42c84;
 }
 
 .nav-link.router-link-active {
