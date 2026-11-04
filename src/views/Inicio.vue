@@ -48,13 +48,77 @@
     </div>
   </section>
   <Knews />
+  <section class="merch">
+    <div class="merch-heading">
+      <div>
+        <h2>Merch</h2>
+        <p class="merch-intro">
+          Encuentra el merch oficial de tus grupos favoritos.
+        </p>
+      </div>
+      <RouterLink class="more-button" :to="{ name: 'merch' }">Ver catálogo</RouterLink>
+    </div>
+    <div v-if="featuredMerch.length" class="merch-grid">
+      <article v-for="producto in featuredMerch" :key="producto.id" class="merch-card">
+        <div class="merch-image-wrap">
+          <img
+            v-if="producto.image"
+            :src="producto.image"
+            :alt="producto.titulo"
+            class="merch-image"
+            loading="lazy"
+          >
+          <div v-else class="merch-image-placeholder" aria-hidden="true">K-POP MERCH</div>
+          <span class="merch-category">{{ producto.categoria }}</span>
+        </div>
+        <div class="merch-card-info">
+          <p class="merch-group">{{ producto.grupo }}</p>
+          <h3>{{ producto.titulo }}</h3>
+          <div class="merch-card-purchase">
+            <strong>{{ producto.precio }}</strong>
+            <div v-if="isRegistered" class="quantity-controls" :aria-label="`Cantidad de ${producto.titulo}`">
+              <button
+                class="quantity-button"
+                type="button"
+                :aria-label="`Restar una unidad de ${producto.titulo}`"
+                :disabled="(quantities[producto.id] ?? 0) === 0"
+                @click="decrementar(producto.id)"
+              >
+                −
+              </button>
+              <output class="quantity-value" aria-live="polite">
+                {{ quantities[producto.id] ?? 0 }}
+              </output>
+              <button
+                class="quantity-button"
+                type="button"
+                :aria-label="`Sumar una unidad de ${producto.titulo}`"
+                @click="incrementar(producto.id)"
+              >
+                +
+              </button>
+            </div>
+            <RouterLink v-else class="merch-login-link" :to="{ name: 'sesion' }">
+              Inicia sesión para comprar
+            </RouterLink>
+          </div>
+        </div>
+      </article>
+    </div>
+    <p v-else class="merch-empty">Pronto agregaremos nuevos productos.</p>
+  </section>
 </template>
 
 <script setup lang="ts">
 import {group} from '@/data/grupos';
+import {catalogo} from '@/data/catalogo';
+import {isRegistered} from '@/stores/session';
 import Knews from '@/views/Knews.vue';
+import { useContador } from '@/composables/useContador'
 
 const topGrupos = group.slice(0, 3);
+const featuredMerch = catalogo.slice(0, 4);
+const { quantities, incrementar, decrementar } = useContador()
 </script>
 
 <style scoped>
@@ -337,6 +401,189 @@ const topGrupos = group.slice(0, 3);
   outline-offset: 3px;
 }
 
+.merch {
+  width: calc(100% + 4rem);
+  margin-left: -2rem;
+  margin-bottom: -3rem;
+  padding: 2rem clamp(1.5rem, 5vw, 4rem) 2rem;
+  background: #f8eef5;
+}
+
+.merch-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.merch-heading h2 {
+  margin: 0;
+  color: #171321;
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.merch-intro {
+  margin: 0.35rem 0 0;
+  color: #625a68;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.merch-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.merch-card {
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 0.5rem 1.5rem rgb(23 19 33 / 12%);
+}
+
+.merch-image-wrap {
+  position: relative;
+  height: clamp(12rem, 20vw, 17rem);
+  overflow: hidden;
+  background: #f8eef5;
+}
+
+.merch-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.merch-card:hover .merch-image {
+  transform: scale(1.04);
+}
+
+.merch-image-placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  background: linear-gradient(135deg, #211b30, #49304b);
+  color: #f42c84;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.merch-category {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #171321;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.merch-card-info {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem;
+}
+
+.merch-card-purchase {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.merch-group {
+  margin: 0;
+  color: #f42c84;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.merch-card-info h3 {
+  margin: 0;
+  color: #171321;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.merch-card-info strong {
+  color: #171321;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+.quantity-controls {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.25rem;
+  border: 1px solid #f0d7e9;
+  border-radius: 999px;
+}
+
+.quantity-button {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #f42c84;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.quantity-button:hover:not(:disabled) {
+  background: #d91c6c;
+}
+
+.quantity-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.quantity-button:focus-visible,
+.merch-login-link:focus-visible {
+  outline: 3px solid #f42c84;
+  outline-offset: 3px;
+}
+
+.quantity-value {
+  min-width: 1ch;
+  color: #171321;
+  font-weight: 700;
+  text-align: center;
+}
+
+.merch-login-link {
+  color: #a51d5b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: right;
+  text-decoration-color: #f42c84;
+  text-underline-offset: 3px;
+}
+
+.merch-empty {
+  padding: 2rem;
+  color: #625a68;
+  text-align: center;
+}
+
 @media (max-width: 480px) {
   .welcome {
     min-height: auto;
@@ -371,8 +618,35 @@ const topGrupos = group.slice(0, 3);
     gap: 1.25rem;
   }
 
+  .merch {
+    padding: 1.5rem 1rem 1.5rem;
+  }
+
+  .merch-heading {
+    align-items: flex-start;
+  }
+
+  .merch-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+
+  .merch-image-wrap {
+    height: 11rem;
+  }
+
+  .merch-card-info {
+    padding: 0.75rem;
+  }
+
   .group-card {
     height: 13rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 900px) {
+  .merch-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 </style>
