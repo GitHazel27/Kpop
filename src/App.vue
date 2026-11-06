@@ -74,7 +74,7 @@ main {
   width: 100%;
   flex: 1;
   padding: 0 2rem;
-  margin: 3rem 0;
+  margin: 1rem 0 3rem;
 }
 
 .chat-widget {

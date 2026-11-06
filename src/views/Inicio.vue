@@ -103,7 +103,7 @@ const featuredMerch = catalogo.slice(0, 4);
   align-items: center;
   gap: 1.5rem;
   overflow: hidden;
-  margin: -3rem 0 0 -2rem;
+  margin: -1rem 0 0 -2rem;
   padding: clamp(2rem, 5vw, 3.5rem);
   border: 1px solid rgb(255 255 255 / 10%);
   background: #09070c;

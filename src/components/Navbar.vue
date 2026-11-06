@@ -21,6 +21,7 @@
                 <RouterLink v-for="grupo in topGrupos":key="grupo.id":to="`/grupos/${grupo.id}`"class="dropdown-group">
                   {{ grupo.nombre}}
                 </RouterLink>
+                <RouterLink class="dropdown-group" to="/grupos">Ver todo</RouterLink>
               </div>
             </div>
             <RouterLink

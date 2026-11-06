@@ -5,6 +5,7 @@ import Cart from '../views/Cart.vue'
 import Knews from '@/views/Knews.vue'
 import Merch from '@/views/Merch.vue'
 import Artistas from '@/views/Artistas.vue'
+import GrupoDet from '@/views/GrupoDet.vue'
 import Eventos from '@/views/Eventos.vue'
 
 const routes = [
@@ -14,6 +15,7 @@ const routes = [
     {path: '/knews' ,name:'knews' ,component: Knews},
     {path: '/merch' ,name:'merch' ,component: Merch},
     {path: '/grupos' ,name:'grupos' ,component: Artistas},
+    {path: '/grupos/:id' ,name:'grupo-det' ,component: GrupoDet},
     {path: '/eventos' ,name:'eventos' ,component: Eventos}
   ]
   

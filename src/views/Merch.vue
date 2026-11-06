@@ -86,7 +86,7 @@ const { grupoSeleccionado, grupos, productosFiltrados } = useFiltro(catalogo);
   width: min(100%, 76rem);
   min-height: 60vh;
   margin: 0 auto;
-  padding: clamp(1.5rem, 4vw, 3rem) 0;
+  padding: clamp(0.75rem, 2vw, 1.25rem) 0;
 }
 
 .merch-heading {
