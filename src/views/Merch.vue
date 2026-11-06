@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { catalogo } from '@/data/catalogo';
+import { useFiltro } from '@/composables/useFiltro';
 import { isRegistered } from '@/stores/session';
 import { useContador } from '@/composables/useContador'
 
 const { quantities, incrementar, decrementar } = useContador()
+const { grupoSeleccionado, grupos, productosFiltrados } = useFiltro(catalogo);
 </script>
 
 <template>
@@ -14,8 +16,18 @@ const { quantities, incrementar, decrementar } = useContador()
       <p>Encuentra artículos de tus grupos favoritos.</p>
     </header>
 
-    <div v-if="catalogo.length" class="product-grid">
-      <article v-for="producto in catalogo" :key="producto.id" class="product-card">
+    <div v-if="catalogo.length" class="group-filter">
+      <label for="group-filter">Filtrar por grupo</label>
+      <select id="group-filter" v-model="grupoSeleccionado">
+        <option value="Todos">Todos los grupos</option>
+        <option v-for="grupo in grupos" :key="grupo" :value="grupo">
+          {{ grupo }}
+        </option>
+      </select>
+    </div>
+
+    <div v-if="productosFiltrados.length" class="product-grid">
+      <article v-for="producto in productosFiltrados" :key="producto.id" class="product-card">
         <div class="product-image-wrap">
           <img
             v-if="producto.image"
@@ -32,7 +44,7 @@ const { quantities, incrementar, decrementar } = useContador()
           <h2>{{ producto.titulo }}</h2>
           <p v-if="producto.descripcion" class="product-description">{{ producto.descripcion }}</p>
           <div class="product-purchase">
-            <strong class="product-price">{{ producto.precio }}</strong>
+            <strong class="product-price">${{ producto.precio }}.00</strong>
             <div v-if="isRegistered" class="quantity-controls" :aria-label="`Cantidad de ${producto.titulo}`">
               <button
                 class="quantity-button"
@@ -62,6 +74,9 @@ const { quantities, incrementar, decrementar } = useContador()
         </div>
       </article>
     </div>
+    <p v-else-if="catalogo.length" class="empty-catalog">
+      No hay productos disponibles para este grupo.
+    </p>
     <p v-else class="empty-catalog">Pronto agregaremos nuevos productos.</p>
   </section>
 </template>
@@ -99,6 +114,39 @@ const { quantities, incrementar, decrementar } = useContador()
   margin: 0.65rem 0 0;
   color: #625a68;
 }
+
+.group-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.group-filter label {
+  color: #171321;
+  font-weight: 700;
+}
+
+.group-filter select {
+  min-width: 12rem;
+  padding: 0.65rem 2rem 0.65rem 0.8rem;
+  border: 1px solid #f0d7e9;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #171321;
+  font: inherit;
+}
+
+.group-filter select:focus-visible {
+  outline: 3px solid #f42c84;
+  outline-offset: 2px;
+}
+
+.group-filter select option {
+  color: #171321;
+  font-weight: 500;
+}
+
 
 .product-grid {
   display: grid;
@@ -149,6 +197,7 @@ const { quantities, incrementar, decrementar } = useContador()
   color: #171321;
   font-size: 0.75rem;
   font-weight: 700;
+  border: 1px solid #f0d7e9;
 }
 
 .product-info {

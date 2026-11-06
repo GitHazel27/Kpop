@@ -75,32 +75,7 @@
           <p class="merch-group">{{ producto.grupo }}</p>
           <h3>{{ producto.titulo }}</h3>
           <div class="merch-card-purchase">
-            <strong>{{ producto.precio }}</strong>
-            <div v-if="isRegistered" class="quantity-controls" :aria-label="`Cantidad de ${producto.titulo}`">
-              <button
-                class="quantity-button"
-                type="button"
-                :aria-label="`Restar una unidad de ${producto.titulo}`"
-                :disabled="(quantities[producto.id] ?? 0) === 0"
-                @click="decrementar(producto.id)"
-              >
-                −
-              </button>
-              <output class="quantity-value" aria-live="polite">
-                {{ quantities[producto.id] ?? 0 }}
-              </output>
-              <button
-                class="quantity-button"
-                type="button"
-                :aria-label="`Sumar una unidad de ${producto.titulo}`"
-                @click="incrementar(producto.id)"
-              >
-                +
-              </button>
-            </div>
-            <RouterLink v-else class="merch-login-link" :to="{ name: 'sesion' }">
-              Inicia sesión para comprar
-            </RouterLink>
+            <strong>${{ producto.precio }}.00</strong>
           </div>
         </div>
       </article>
@@ -112,13 +87,10 @@
 <script setup lang="ts">
 import {group} from '@/data/grupos';
 import {catalogo} from '@/data/catalogo';
-import {isRegistered} from '@/stores/session';
 import Knews from '@/views/Knews.vue';
-import { useContador } from '@/composables/useContador'
 
 const topGrupos = group.slice(0, 3);
 const featuredMerch = catalogo.slice(0, 4);
-const { quantities, incrementar, decrementar } = useContador()
 </script>
 
 <style scoped>
@@ -485,6 +457,7 @@ const { quantities, incrementar, decrementar } = useContador()
   color: #171321;
   font-size: 0.75rem;
   font-weight: 700;
+  border: 1px solid #f0d7e9;
 }
 
 .merch-card-info {
@@ -520,62 +493,6 @@ const { quantities, incrementar, decrementar } = useContador()
   color: #171321;
   font-size: 1.05rem;
   white-space: nowrap;
-}
-
-.quantity-controls {
-  display: flex;
-  min-height: 2.5rem;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.25rem;
-  border: 1px solid #f0d7e9;
-  border-radius: 999px;
-}
-
-.quantity-button {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  flex: 0 0 auto;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: #f42c84;
-  color: #fff;
-  cursor: pointer;
-  font-size: 1.25rem;
-  line-height: 1;
-}
-
-.quantity-button:hover:not(:disabled) {
-  background: #d91c6c;
-}
-
-.quantity-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-
-.quantity-button:focus-visible,
-.merch-login-link:focus-visible {
-  outline: 3px solid #f42c84;
-  outline-offset: 3px;
-}
-
-.quantity-value {
-  min-width: 1ch;
-  color: #171321;
-  font-weight: 700;
-  text-align: center;
-}
-
-.merch-login-link {
-  color: #a51d5b;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-align: right;
-  text-decoration-color: #f42c84;
-  text-underline-offset: 3px;
 }
 
 .merch-empty {
