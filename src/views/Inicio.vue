@@ -350,9 +350,10 @@ const featuredMerch = catalogo.slice(0, 4);
 
 .more-button {
   display: inline-flex;
-  width: fit-content;
+  width: 150px;
   flex: 0 0 auto;
   align-items: center;
+  justify-content: center;
   padding: 0.7rem 1.5rem;
   border: 1px solid #f42c84;
   border-radius: 999px;

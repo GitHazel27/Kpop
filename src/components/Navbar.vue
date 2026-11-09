@@ -49,9 +49,11 @@
             </RouterLink>
           </div>
     </nav>
-    <section class="nav-message">
-      <h4>Merch 100% original con envíos a todo méxico</h4>
-    </section>
+    <div class="nav-message">
+      <Transition name="fade" mode="out-in">
+        <h4 key="index">{{ messages[index] }}</h4>
+      </Transition>
+    </div>
   </header>
 </template>
 
@@ -62,6 +64,16 @@ const route = useRoute();
 const showFavs = ref(false)
 import {group} from '@/data/grupos';
 const topGrupos = group.slice(0,3);
+
+const messages = [
+  'Merch 100% original con envíos a todo méxico',
+  'Envíos gratis en compras mayores a $999.00',
+  'Nuevos productos cada semana, ¡no te los pierdas!',
+]
+const index = ref(0);
+setInterval(() => {
+  index.value = (index.value + 1) % messages.length
+}, 6000)
 </script>
 
 <style scoped>
@@ -248,6 +260,16 @@ h4{
   display:flex ;
   align-items: center;
   font-weight: 500;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 @media (max-width: 768px) {

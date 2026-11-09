@@ -23,7 +23,7 @@ export const catalogo: catalogo[] = [
     {
         id: 2,
         categoria: 'Album',
-        idgrupo: 2,
+        idgrupo: 4,
         grupo: 'BTS',
         titulo: 'BTS - ARIRANG [Living Legend Ver.] + 4 Extra Photocards',
         precio: 809.00,
@@ -33,7 +33,7 @@ export const catalogo: catalogo[] = [
     {
         id: 3,
         categoria: 'Album',
-        idgrupo: 2,
+        idgrupo: 4,
         grupo: 'BTS',
         titulo: 'BTS Album - MAP OF SOUL : PERSONA [ 2 Ver. ] CD',
         precio: 529.00,
@@ -63,7 +63,7 @@ export const catalogo: catalogo[] = [
     {
         id: 6,
         categoria: 'Lightstick',
-        idgrupo: 2,
+        idgrupo: 4,
         grupo: 'BTS',
         titulo: 'BTS - Light Stick Oficial Versión 4',
         precio: 1299.00,
@@ -103,7 +103,7 @@ export const catalogo: catalogo[] = [
     {
         id: 10,
         categoria: 'Merch Oficial',
-        idgrupo: 2,
+        idgrupo: 4,
         grupo: 'BTS',
         titulo: 'BTS -Wind Jacket Versión SWIM',
         precio: 1899.00,
@@ -128,5 +128,15 @@ export const catalogo: catalogo[] = [
         precio: 299.00,
         descripcion: '',
         image:'https://cdn-contents.weverseshop.io/public/shop/45485d3da610bee0035b6b4ace3b3597.png?w=720&q=95'
+    },
+    {
+        id: 13,
+        categoria: 'Merch Oficial',
+        idgrupo: 2,
+        grupo:'K/DA',
+        titulo: 'Set de equipo Mini K/DA',
+        precio: 799.00,
+        descripcion: '',
+        image:'https://merch.riotgames.com/_next/image/?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fdsfx7636%2Fconsumer_products_live%2F2b6b781266c368e96665190b9e2b02c595be0af0-1000x1000.png%3FaccountingTag%3Dconsumer_products&w=1920&q=75'
     }
 ]

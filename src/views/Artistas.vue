@@ -6,7 +6,7 @@ import { group } from '@/data/grupos'
   <section class="artists-page">
     <header class="artists-heading">
       <p class="eyebrow">Descubre tus favoritos</p>
-      <h1>Artistas</h1>
+      <h1>Grupos</h1>
       <p>Explora los grupos y conoce a cada uno de sus integrantes.</p>
     </header>
 
