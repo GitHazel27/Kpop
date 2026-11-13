@@ -2,27 +2,18 @@
 import { computed, ref } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import esLocale from '@fullcalendar/core/locales/es'
 import type { CalendarOptions, EventClickArg } from '@fullcalendar/core'
+import type { Action, Category } from '@/data/events'
+import { kpopEvents } from '@/data/events'
+import { isRegistered } from '@/stores/session'
 
-type Category = 'concierto' | 'comeback' | 'fanmeet' | 'merch' | 'cumple'
-
-interface KpopEvent {
-  title: string
-  start: string
-  end?: string
-  allDay?: boolean
-  category: Category
-  place?: string
-  description?: string
-}
 
 interface SelectedEvent {
   title: string
   category: Category
+  action?: Action
   when: string
   place?: string
   description?: string
@@ -33,70 +24,16 @@ const categoryList: { key: Category; label: string }[] = [
   { key: 'comeback', label: 'Comebacks' },
   { key: 'fanmeet', label: 'Fan meetings' },
   { key: 'merch', label: 'Merch' },
-  { key: 'cumple', label: 'Cumpleaños' }
+  { key: 'cumple', label: 'Cumpleaños' },
 ]
 
 const categoryLabel = Object.fromEntries(
   categoryList.map(c => [c.key, c.label])
 ) as Record<Category, string>
 
-// Reemplaza estos eventos por los tuyos (o cárgalos desde una API)
-const kpopEvents: KpopEvent[] = [
-  {
-    title: 'Comeback: nuevo mini álbum',
-    start: '2026-11-17T18:00:00',
-    category: 'comeback',
-    description: 'Lanzamiento del nuevo mini álbum y video musical.'
-  },
-  {
-    title: 'Concierto en Ciudad de México',
-    start: '2026-11-21T20:00:00',
-    category: 'concierto',
-    place: 'Arena Ciudad de México',
-    description: 'Gira mundial, primera fecha en México.'
-  },
-  {
-    title: 'Fan meeting',
-    start: '2026-11-24T17:00:00',
-    category: 'fanmeet',
-    place: 'Teatro Metropólitan',
-    description: 'Firma de álbumes y sesión de preguntas con los fans.'
-  },
-  {
-    title: 'Drop de merch',
-    start: '2026-11-27',
-    allDay: true,
-    category: 'merch',
-    description: 'Nueva colección de lightsticks y photocards.'
-  },
-  {
-    title: 'Cumpleaños del maknae',
-    start: '2026-12-02',
-    allDay: true,
-    category: 'cumple',
-    description: 'Hora de trendear en redes.'
-  },
-  {
-    title: 'Concierto en Guadalajara',
-    start: '2026-12-05T20:00:00',
-    category: 'concierto',
-    place: 'Auditorio Telmex'
-  },
-  {
-    title: 'Comeback: sencillo digital',
-    start: '2026-12-10T12:00:00',
-    category: 'comeback'
-  },
-  {
-    title: 'Fan meeting de fin de año',
-    start: '2026-12-18T16:00:00',
-    category: 'fanmeet',
-    place: 'Foro Sol'
-  }
-]
-
 const activeCategories = ref<Category[]>(categoryList.map(c => c.key))
 const selected = ref<SelectedEvent | null>(null)
+const selectedActions = ref<string[]>([])
 
 const toggleCategory = (key: Category) => {
   activeCategories.value = activeCategories.value.includes(key)
@@ -104,13 +41,34 @@ const toggleCategory = (key: Category) => {
     : [...activeCategories.value, key]
 }
 
+const isAction = (value: unknown): value is Action =>
+  value === 'like' || value === 'avisar' || value === 'asistir'
+
+const actionLabel = (action: Action) => ({
+  like: 'Me gusta',
+  avisar: 'Avisarme',
+  asistir: 'Asistiré al evento'
+})[action]
+
+const actionIcon = (action: Action, isSelected: boolean) => {
+  if (action === 'like') return isSelected ? '♥' : '♡'
+  if (action === 'avisar') return '🔔'
+  return '✓'
+}
+
+const toggleSelectedAction = (title: string) => {
+  selectedActions.value = selectedActions.value.includes(title)
+    ? selectedActions.value.filter(item => item !== title)
+    : [...selectedActions.value, title]
+}
+
 const visibleEvents = computed(() =>
   kpopEvents
     .filter(e => activeCategories.value.includes(e.category))
-    .map(({ category, place, description, ...event }) => ({
+    .map(({ category, place, description, actions, ...event }) => ({
       ...event,
       classNames: [`ev-${category}`],
-      extendedProps: { category, place, description }
+      extendedProps: { category, place, description, actions }
     }))
 )
 
@@ -123,10 +81,11 @@ const formatWhen = (date: Date | null, allDay: boolean) => {
 }
 
 const onEventClick = ({ event }: EventClickArg) => {
-  const { category, place, description } = event.extendedProps
+  const { category, place, description, actions } = event.extendedProps
   selected.value = {
     title: event.title,
     category,
+    action: isAction(actions) ? actions : undefined,
     when: formatWhen(event.start, event.allDay),
     place,
     description
@@ -134,20 +93,21 @@ const onEventClick = ({ event }: EventClickArg) => {
 }
 
 const calendarOptions = computed<CalendarOptions>(() => ({
-  plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+  plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
   locale: esLocale,
   firstDay: 1,
   height: 'auto',
   fixedWeekCount: false,
+  eventDisplay: 'list-item',
+  displayEventTime: false,
   dayMaxEvents: 3,
   moreLinkText: n => `+${n} más`,
   headerToolbar: {
     left: 'prev,next today',
     center: 'title',
-    right: 'dayGridMonth,timeGridWeek,listMonth'
+    right: ''
   },
-  eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
   events: visibleEvents.value,
   eventClick: onEventClick
 }))
@@ -176,7 +136,22 @@ const calendarOptions = computed<CalendarOptions>(() => ({
     </div>
 
     <div class="kcal__board">
-      <FullCalendar :options="calendarOptions" />
+      <FullCalendar :options="calendarOptions">
+        <template #eventContent="{ event }">
+          <span class="calendar-event">
+            <span class="dot" :class="`dot--${event.extendedProps.category}`" aria-hidden="true"></span>
+            <span
+              v-if="isRegistered && isAction(event.extendedProps.actions)"
+              class="calendar-event__action"
+              :class="{ 'calendar-event__action--selected': selectedActions.includes(event.title) }"
+              aria-hidden="true"
+            >
+              {{ actionIcon(event.extendedProps.actions, selectedActions.includes(event.title)) }}
+            </span>
+            <span class="calendar-event__title">{{ event.title }}</span>
+          </span>
+        </template>
+      </FullCalendar>
     </div>
 
     <aside v-if="selected" class="kcal__detail" aria-live="polite">
@@ -191,7 +166,25 @@ const calendarOptions = computed<CalendarOptions>(() => ({
       <p class="detail__when">{{ selected.when }}</p>
       <p v-if="selected.place" class="detail__place">{{ selected.place }}</p>
       <p v-if="selected.description" class="detail__desc">{{ selected.description }}</p>
+      <button
+        v-if="isRegistered && selected.action"
+        type="button"
+        class="detail__action"
+        :class="{ 'detail__action--selected': selectedActions.includes(selected.title) }"
+        :aria-pressed="selectedActions.includes(selected.title)"
+        @click="toggleSelectedAction(selected.title)"
+      >
+        <span aria-hidden="true">
+          {{ actionIcon(selected.action, selectedActions.includes(selected.title)) }}
+        </span>
+        {{ actionLabel(selected.action) }}
+      </button>
     </aside>
+    <div v-if="isRegistered" class="kcal__board" style="margin-top: 1.25rem;">
+      <p style="color: var(--pink-soft); font-size: 0.9rem; text-align: center;">
+        Selecciona un evento para elegir tu acción.
+      </p>
+    </div>
   </section>
 </template>
 
@@ -307,6 +300,15 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   box-shadow: 0 0 0 1px rgb(255 92 192 / 8%), 0 1.5rem 3rem rgb(0 0 0 / 45%);
 }
 
+.kcal__board :deep(.fc-header-toolbar) {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.kcal__board :deep(.fc-toolbar-chunk:nth-child(2)) {
+  justify-self: center;
+}
+
 .kcal__board :deep(.fc-toolbar-title) {
   color: var(--text);
   font-size: 1.35rem;
@@ -339,9 +341,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   text-transform: capitalize;
 }
 
-.kcal__board :deep(.fc-daygrid-day-number),
-.kcal__board :deep(.fc-timegrid-axis-cushion),
-.kcal__board :deep(.fc-timegrid-slot-label-cushion) {
+.kcal__board :deep(.fc-daygrid-day-number) {
   color: var(--muted);
   text-decoration: none;
 }
@@ -383,7 +383,20 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   --fc-event-bg-color: var(--magenta);
   --fc-event-border-color: var(--pink);
   --fc-event-text-color: #fff;
-  background-image: linear-gradient(90deg, var(--magenta), var(--pink));
+}
+
+.kcal__board :deep(.ev-comeback .fc-daygrid-event-dot),
+.kcal__board :deep(.ev-merch .fc-daygrid-event-dot) {
+  box-sizing: border-box;
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: 0 0 0.7rem;
+  border-radius: 50%;
+}
+
+.kcal__board :deep(.ev-comeback .fc-daygrid-event-dot) {
+  border: 0;
+  background: linear-gradient(135deg, var(--magenta), var(--pink));
 }
 
 .kcal__board :deep(.ev-fanmeet) {
@@ -396,6 +409,11 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   --fc-event-bg-color: transparent;
   --fc-event-border-color: var(--pink);
   --fc-event-text-color: var(--pink-soft);
+}
+
+.kcal__board :deep(.ev-merch .fc-daygrid-event-dot) {
+  border: 2px solid var(--pink);
+  background: transparent;
 }
 
 .kcal__board :deep(.ev-cumple) {
@@ -420,6 +438,29 @@ const calendarOptions = computed<CalendarOptions>(() => ({
 
 .kcal__board :deep(.ev-fanmeet .fc-list-event-dot) { border-color: var(--pink-soft); }
 .kcal__board :deep(.ev-cumple .fc-list-event-dot) { border-color: #fff; }
+
+.calendar-event {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.calendar-event__action {
+  flex: 0 0 auto;
+  color: var(--pink-soft);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.calendar-event__action--selected {
+  color: var(--pink);
+}
+
+.calendar-event__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* ---------- Detalle del evento ---------- */
 .kcal__detail {
@@ -460,6 +501,30 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   color: var(--pink);
 }
 
+.detail__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--pink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--pink-soft);
+  cursor: pointer;
+  font: inherit;
+}
+
+.detail__action--selected {
+  background: var(--pink);
+  color: var(--ink);
+}
+
+.detail__action:focus-visible {
+  outline: 3px solid var(--pink-soft);
+  outline-offset: 2px;
+}
+
 .kcal__detail h3 {
   margin: 0.5rem 0 0.25rem;
   font-size: 1.25rem;
@@ -489,8 +554,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   }
 
   .kcal__board :deep(.fc-header-toolbar) {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: 1fr;
     gap: 0.6rem;
   }
 
