@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import Navbar from './components/Navbar.vue'
 import Chat from './components/Chat.vue'
 import Footer from './components/Footer.vue'
-import Cart from './views/Cart.vue'
+import CartFather from './components/CartFather.vue'
 import { isCartOpen } from './stores/cart'
 
 const isChatOpen = ref(false)
@@ -17,7 +17,7 @@ const isChatOpen = ref(false)
       <RouterView />
     </main>
     <Footer />
-    <Cart v-if="isCartOpen" />
+    <CartFather v-if="isCartOpen" />
 
     <section class="chat-widget" aria-label="Chat">
       <div v-if="isChatOpen" class="chat-window">

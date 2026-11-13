@@ -1,7 +1,13 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-export const isRegistered = ref(false)
+export interface AccountInfo {
+  name: string
+  email: string
+}
 
-export function markUserAsRegistered() {
-  isRegistered.value = true
+export const userAccount = ref<AccountInfo | null>(null)
+export const isRegistered = computed(() => userAccount.value !== null)
+
+export function markUserAsRegistered(account: AccountInfo) {
+  userAccount.value = account
 }

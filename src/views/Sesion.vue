@@ -10,7 +10,10 @@ const email = ref('')
 const password = ref('')
 
 function submitForm() {
-  markUserAsRegistered()
+  markUserAsRegistered({
+    name: name.value || email.value.split('@')[0] || 'Usuario',
+    email: email.value,
+  })
   void router.push({ name: 'inicio' })
 }
 </script>
