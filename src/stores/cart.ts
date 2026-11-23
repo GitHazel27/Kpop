@@ -1,4 +1,10 @@
 import { computed, ref } from 'vue'
+import type { AccountInfo } from '@/stores/session'
+
+export interface CheckoutRequest {
+  account: AccountInfo
+  total: number
+}
 
 export const quantities = ref<Record<number, number>>({})
 export const isCartOpen = ref(false)
@@ -13,4 +19,8 @@ export function incrementar(productId: number) {
 
 export function decrementar(productId: number) {
   quantities.value[productId] = Math.max(0, (quantities.value[productId] ?? 0) - 1)
+}
+
+export function limpiarCarrito() {
+  quantities.value = {}
 }

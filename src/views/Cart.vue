@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 import { catalogo } from '@/data/catalogo'
-import { cartItemCount, decrementar, incrementar, isCartOpen, quantities } from '@/stores/cart'
-import { isRegistered } from '@/stores/session'
+import { cartItemCount, decrementar, incrementar, quantities } from '@/stores/cart'
+import { isRegistered, userAccount } from '@/stores/session'
+import type { CheckoutRequest } from '@/stores/cart'
 
-const router = useRouter()
-const checkoutMessage = ref('')
 const cartProducts = computed(() =>
   catalogo
     .filter((product) => (quantities.value[product.id] ?? 0) > 0)
@@ -16,30 +14,32 @@ const subtotal = computed(() =>
   cartProducts.value.reduce((total, product) => total + product.precio * product.quantity, 0),
 )
 
-function closeCart() {
-  isCartOpen.value = false
+function formatCurrency(amount: number) {
+  return new Intl.NumberFormat('es-MX', {
+    style: 'currency',
+    currency: 'MXN',
+  }).format(amount)
 }
 
-function proceedToCheckout() {
-  if (!isRegistered.value) {
-    closeCart()
-    void router.push({ name: 'sesion' })
-    return
-  }
+const emit = defineEmits<{
+  close: []
+  checkout: [payload: CheckoutRequest]
+}>()
 
-  checkoutMessage.value = 'El proceso de pago estará disponible próximamente.'
+function startCheckout() {
+  if (!userAccount.value) return
+  emit('checkout', { account: userAccount.value, total: subtotal.value })
 }
 </script>
 
 <template>
-  <div class="cart-overlay" @click.self="closeCart" @keydown.esc.window="closeCart">
-    <aside
-      id="shopping-cart"
-      class="cart-panel"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="cart-title"
-    >
+  <aside
+    id="shopping-cart"
+    class="cart-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cart-title"
+  >
       <header class="cart-header">
         <h1 id="cart-title">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true">
@@ -53,7 +53,7 @@ function proceedToCheckout() {
           </svg>
           Carrito de Compras ({{ cartItemCount }})
         </h1>
-        <button class="close-button" type="button" aria-label="Cerrar carrito" @click="closeCart">
+        <button class="close-button" type="button" aria-label="Cerrar carrito" @click="emit('close')">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true">
             <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
           </svg>
@@ -68,7 +68,7 @@ function proceedToCheckout() {
             <div class="item-details">
               <p class="item-group">{{ product.grupo }}</p>
               <h2>{{ product.titulo }}</h2>
-              <strong>${{ product.precio.toFixed(2) }}</strong>
+              <strong>{{ formatCurrency(product.precio) }}</strong>
               <div class="quantity-controls" :aria-label="`Cantidad de ${product.titulo}`">
                 <button
                   type="button"
@@ -104,7 +104,7 @@ function proceedToCheckout() {
         </svg>
         <h2>Tu carrito está vacío</h2>
         <p>Descubre álbumes oficiales y lightsticks en nuestra tienda.</p>
-        <RouterLink :to="{ name: 'merch' }" class="shop-link" @click="closeCart">
+        <RouterLink :to="{ name: 'merch' }" class="shop-link" @click="emit('close')">
           Explorar tienda
         </RouterLink>
       </div>
@@ -112,7 +112,7 @@ function proceedToCheckout() {
       <footer v-if="cartProducts.length" class="cart-footer">
         <div class="subtotal">
           <span>Subtotal</span>
-          <strong>${{ subtotal.toFixed(2) }}</strong>
+          <strong>{{ formatCurrency(subtotal) }}</strong>
         </div>
         <p v-if="!isRegistered" class="register-reminder">
           Para comprar, primero debes iniciar sesión o registrarte.
@@ -121,33 +121,18 @@ function proceedToCheckout() {
           v-if="!isRegistered"
           class="checkout-button"
           :to="{ name: 'sesion' }"
-          @click="closeCart"
+          @click="emit('close')"
         >
           Iniciar sesión para comprar
         </RouterLink>
-        <button v-else class="checkout-button" type="button" @click="proceedToCheckout">
+        <button v-else class="checkout-button" type="button" @click="startCheckout">
           Finalizar compra
         </button>
-        <p v-if="checkoutMessage" class="checkout-message" aria-live="polite">
-          {{ checkoutMessage }}
-        </p>
       </footer>
-    </aside>
-  </div>
+  </aside>
 </template>
 
 <style scoped>
-.cart-overlay {
-  position: fixed;
-  z-index: 1100;
-  inset: 0;
-  display: flex;
-  justify-content: flex-end;
-  background: rgb(0 0 0 / 62%);
-  backdrop-filter: blur(5px);
-  animation: overlay-appear 180ms ease-out;
-}
-
 .cart-panel {
   display: flex;
   width: min(520px, 100%);
@@ -157,7 +142,6 @@ function proceedToCheckout() {
   background: #12121a;
   color: #f7f7fb;
   box-shadow: -12px 0 36px rgb(0 0 0 / 28%);
-  animation: panel-appear 220ms ease-out;
 }
 
 .cart-header {
@@ -335,8 +319,7 @@ function proceedToCheckout() {
   font-size: 1.05rem;
 }
 
-.register-reminder,
-.checkout-message {
+.register-reminder {
   margin: 0 0 0.8rem;
   color: #9ba8bf;
   font-size: 0.88rem;
@@ -365,33 +348,12 @@ function proceedToCheckout() {
   background: #d91c6c;
 }
 
-.checkout-message {
-  margin: 0.75rem 0 0;
-}
-
 .close-button:focus-visible,
 .quantity-controls button:focus-visible,
 .checkout-button:focus-visible,
 .shop-link:focus-visible {
   outline: 3px solid #ff85bb;
   outline-offset: 3px;
-}
-
-@keyframes overlay-appear {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes panel-appear {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cart-overlay,
-  .cart-panel {
-    animation: none;
-  }
 }
 
 @media (max-width: 480px) {
