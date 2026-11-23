@@ -74,7 +74,7 @@ export const group: Groups[] = [
         image: "https://images.openai.com/static-rsc-4/U2qhI0esysCivkHsdfLzLjtns6XWBPrJH0fKnwMILGf7HoAb6O4f4WJvYseHC_QBCcTKWtkfkFvFVpMyw5YUS7E8-7lLudwO5dy6ai31bGfV4ON_Hl3aJ96HHi4gOEVfGRQ1nMIgHhA3_L-E0HaDrwyjvim1s-Ber3-2-Y-85vU?purpose=inline",
         edit: "",
         videoDebut: "https://www.youtube.com/watch?v=UOxkGD8qRB4&list=RDUOxkGD8qRB4&start_radio=1",
-        videoFav: "https://www.youtube.com/watch?v=3VTkBuxU4yk&list=RD3VTkBuxU4yk&start_radio=1",
+        videoFav: "https://www.youtube.com/watch?v=Mmw-PpWhKFg&list=RDMmw-PpWhKFg&start_radio=1",
         integrantes: [
             {
                 nombre: "Ahri",

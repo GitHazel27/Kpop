@@ -60,9 +60,16 @@
           </div>
     </nav>
     <div class="nav-message">
-      <Transition name="fade" mode="out-in">
-        <h4 key="index">{{ messages[index] }}</h4>
-      </Transition>
+      <div class="nav-message-track">
+        <h4
+          v-for="(msg, i) in slides"
+          :key="i"
+          class="nav-message-slide"
+          :aria-hidden="i === messages.length"
+        >
+          {{ msg }}
+        </h4>
+      </div>
     </div>
   </header>
 </template>
@@ -81,10 +88,8 @@ const messages = [
   'Envíos gratis en compras mayores a $999.00',
   'Nuevos productos cada semana, ¡no te los pierdas!',
 ]
-const index = ref(0);
-setInterval(() => {
-  index.value = (index.value + 1) % messages.length
-}, 6000)
+
+const slides = [...messages, messages[0]]
 </script>
 
 <style scoped>
@@ -279,33 +284,45 @@ setInterval(() => {
   font-weight: 600;
 }
 
-.nav-message{
+.nav-message {
   width: 100%;
   min-height: .5rem;
-  padding: 0 1rem;
+  padding: 0;
   margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
+  overflow: hidden;
   background-color: #ffd5f4;
 }
 
-h4{
+/* 3 mensajes x 6 s cada uno = 18 s. Si cambias la cantidad de mensajes,
+   ajusta la duración y los porcentajes de @keyframes slide. */
+.nav-message-track {
+  display: flex;
+  width: 100%;
+  animation: slide 18s infinite;
+}
+
+.nav-message-slide {
+  flex: 0 0 100%;
+  padding: 0 1rem;
   color: black;
-  display:flex ;
+  display: flex;
   align-items: center;
+  justify-content: center;
   font-weight: 500;
+  text-align: center;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+@keyframes slide {
+  0%, 28%  { transform: translateX(0);     animation-timing-function: ease-in-out; }
+  33%, 61% { transform: translateX(-100%); animation-timing-function: ease-in-out; }
+  66%, 94% { transform: translateX(-200%); animation-timing-function: ease-in-out; }
+  100%     { transform: translateX(-300%); }
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+@media (prefers-reduced-motion: reduce) {
+  .nav-message-track {
+    animation: none;
+  }
 }
 
 @media (max-width: 768px) {
