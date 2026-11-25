@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { markUserAsRegistered } from '@/stores/session'
+import { markUserAsRegistered, tomarPaginaAnterior } from '@/stores/session'
 
 const router = useRouter()
 const mode = ref<'login' | 'register'>('login')
@@ -14,7 +14,8 @@ function submitForm() {
     name: name.value || email.value.split('@')[0] || 'Usuario',
     email: email.value,
   })
-  void router.push({ name: 'inicio' })
+  // Vuelve a la página en la que estaba; si no hay, va al inicio.
+  void router.push(tomarPaginaAnterior() ?? { name: 'inicio' })
 }
 </script>
 

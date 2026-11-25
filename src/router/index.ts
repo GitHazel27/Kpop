@@ -6,6 +6,7 @@ import Merch from '@/views/Merch.vue'
 import Artistas from '@/views/Artistas.vue'
 import GrupoDet from '@/views/GrupoDet.vue'
 import Eventos from '@/views/Eventos.vue'
+import { guardarPaginaAnterior } from '@/stores/session'
 
 const routes = [
     {path: '/',name: 'inicio',component: Inicio,},
@@ -31,6 +32,13 @@ const router = createRouter({
 
     return { top: 0 }
   },
+})
+
+// Guarda la página desde la que se llegó a /sesion para volver ahí al iniciar sesión.
+router.beforeEach((to, from) => {
+  if (to.name === 'sesion' && from.name && from.name !== 'sesion') {
+    guardarPaginaAnterior(from.fullPath)
+  }
 })
 
 export default router

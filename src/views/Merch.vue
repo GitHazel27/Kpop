@@ -68,7 +68,7 @@ const { grupoSeleccionado, grupos, productosFiltrados } = useFiltro(catalogo);
               </button>
             </div>
             <RouterLink v-else class="login-link" :to="{ name: 'sesion' }">
-              Inicia sesión para comprar
+              Inicia sesión
             </RouterLink>
           </div>
         </div>
