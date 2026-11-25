@@ -1,7 +1,13 @@
-import { describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 import { useContador } from '@/composables/useContador'
+import { limpiarCarrito } from '@/composables/cart'
 
 describe('useContador', () => {
+  //El carrito es estado compartido: se vacía antes de cada prueba.
+  beforeEach(() => {
+    limpiarCarrito()
+  })
+
   test('incrementa la cantidad de un producto', () => {
     const { quantities, incrementar } = useContador()
 
@@ -28,5 +34,4 @@ describe('useContador', () => {
 
     expect(quantities.value[1]).toBe(1)
   })
-
 })

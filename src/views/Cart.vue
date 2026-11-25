@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { catalogo } from '@/data/catalogo'
-import { cartItemCount, decrementar, incrementar, quantities } from '@/stores/cart'
+import { cartItemCount, decrementar, incrementar, quantities } from '@/composables/cart'
 import { isRegistered, userAccount } from '@/stores/session'
-import type { CheckoutRequest } from '@/stores/cart'
+import type { CheckoutRequest } from '@/composables/cart'
 
 const cartProducts = computed(() =>
   catalogo

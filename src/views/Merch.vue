@@ -1,10 +1,21 @@
 <script setup lang="ts">
 import { catalogo } from '@/data/catalogo';
 import { useFiltro } from '@/composables/useFiltro';
-import { isRegistered } from '@/stores/session';
 import { useContador } from '@/composables/useContador'
+import { useRouter } from 'vue-router'
+import { isRegistered } from '@/stores/session'
 
 const { quantities, incrementar, decrementar } = useContador()
+const router = useRouter()
+
+// Sin sesión iniciada no se agrega nada al carrito: manda al inicio de sesión.
+function agregar(productId: number) {
+  if (!isRegistered.value) {
+    void router.push({ name: 'sesion' })
+    return
+  }
+  incrementar(productId)
+}
 const { grupoSeleccionado, grupos, productosFiltrados } = useFiltro(catalogo);
 </script>
 
@@ -45,7 +56,7 @@ const { grupoSeleccionado, grupos, productosFiltrados } = useFiltro(catalogo);
           <p v-if="producto.descripcion" class="product-description">{{ producto.descripcion }}</p>
           <div class="product-purchase">
             <strong class="product-price">${{ producto.precio }}.00</strong>
-            <div v-if="isRegistered" class="quantity-controls" :aria-label="`Cantidad de ${producto.titulo}`">
+            <div class="quantity-controls" :aria-label="`Cantidad de ${producto.titulo}`">
               <button
                 class="quantity-button"
                 type="button"
@@ -62,14 +73,11 @@ const { grupoSeleccionado, grupos, productosFiltrados } = useFiltro(catalogo);
                 class="quantity-button"
                 type="button"
                 :aria-label="`Sumar una unidad de ${producto.titulo}`"
-                @click="incrementar(producto.id)"
+                @click="agregar(producto.id)"
               >
                 +
               </button>
             </div>
-            <RouterLink v-else class="login-link" :to="{ name: 'sesion' }">
-              Inicia sesión
-            </RouterLink>
           </div>
         </div>
       </article>

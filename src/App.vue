@@ -4,7 +4,7 @@ import Navbar from './components/Navbar.vue'
 import Chat from './components/Chat.vue'
 import Footer from './components/Footer.vue'
 import CartFather from './components/CartFather.vue'
-import { isCartOpen } from './stores/cart'
+import { isCartOpen } from './composables/cart.ts'
 
 const isChatOpen = ref(false)
 //feature

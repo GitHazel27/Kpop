@@ -77,7 +77,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { cartItemCount, isCartOpen } from '@/stores/cart'
+import { cartItemCount, isCartOpen } from '@/composables/cart'
 const route = useRoute();
 const showFavs = ref(false)
 import {group} from '@/data/grupos';

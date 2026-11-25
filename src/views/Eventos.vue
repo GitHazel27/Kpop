@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -32,6 +33,7 @@ const categoryLabel = Object.fromEntries(
 ) as Record<Category, string>
 
 const activeCategories = ref<Category[]>(categoryList.map(c => c.key))
+const router = useRouter()
 const selected = ref<SelectedEvent | null>(null)
 const selectedActions = ref<string[]>([])
 
@@ -57,6 +59,11 @@ const actionIcon = (action: Action, isSelected: boolean) => {
 }
 
 const toggleSelectedAction = (title: string) => {
+  // Sin sesión iniciada, manda al inicio de sesión (y luego regresa aquí).
+  if (!isRegistered.value) {
+    void router.push({ name: 'sesion' })
+    return
+  }
   selectedActions.value = selectedActions.value.includes(title)
     ? selectedActions.value.filter(item => item !== title)
     : [...selectedActions.value, title]
@@ -141,7 +148,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
           <span class="calendar-event">
             <span class="dot" :class="`dot--${event.extendedProps.category}`" aria-hidden="true"></span>
             <span
-              v-if="isRegistered && isAction(event.extendedProps.actions)"
+              v-if="isAction(event.extendedProps.actions)"
               class="calendar-event__action"
               :class="{ 'calendar-event__action--selected': selectedActions.includes(event.title) }"
               aria-hidden="true"
@@ -167,7 +174,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
       <p v-if="selected.place" class="detail__place">{{ selected.place }}</p>
       <p v-if="selected.description" class="detail__desc">{{ selected.description }}</p>
       <button
-        v-if="isRegistered && selected.action"
+        v-if="selected.action"
         type="button"
         class="detail__action"
         :class="{ 'detail__action--selected': selectedActions.includes(selected.title) }"
@@ -180,7 +187,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
         {{ actionLabel(selected.action) }}
       </button>
     </aside>
-    <div v-if="isRegistered" class="kcal__board" style="margin-top: 1.25rem;">
+    <div class="kcal__board" style="margin-top: 1.25rem;">
       <p style="color: var(--pink-soft); font-size: 0.9rem; text-align: center;">
         Selecciona un evento para elegir tu acción.
       </p>
@@ -237,6 +244,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   padding: 0.4rem 0.85rem;
   border: 1px solid var(--line);
   border-radius: 999px;
+  border-color: var(--pink-soft);
   background: var(--panel);
   color: var(--text);
   cursor: pointer;
@@ -266,8 +274,8 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   flex: 0 0 auto;
 }
 
-.dot--concierto { background: var(--pink); }
-.dot--comeback { background: linear-gradient(135deg, var(--magenta), var(--pink)); }
+.dot--concierto { background: #ff00bb /*var(--pink);*/ }
+.dot--comeback { background: /*#e7049f;*/ var(--magenta); }
 .dot--fanmeet { background: var(--pink-soft); }
 .dot--merch { border: 2px solid var(--pink); }
 .dot--cumple { background: #fff; }

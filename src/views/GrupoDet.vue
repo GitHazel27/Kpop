@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { catalogo } from '@/data/catalogo'
 import { useContador } from '@/composables/useContador'
 import { group } from '@/data/grupos'
@@ -8,6 +8,16 @@ import { isRegistered } from '@/stores/session'
 
 const route = useRoute()
 const { quantities, incrementar, decrementar } = useContador()
+const router = useRouter()
+
+// Sin sesión iniciada no se agrega nada al carrito: manda al inicio de sesión.
+function agregar(productId: number) {
+  if (!isRegistered.value) {
+    void router.push({ name: 'sesion' })
+    return
+  }
+  incrementar(productId)
+}
 const artist = computed(() => {
   const id = Number(route.params.id)
   return group.find((item) => item.id === id)
@@ -140,7 +150,6 @@ function getYoutubeEmbedUrl(url?: string) {
             <div class="merch-purchase">
               <strong>${{ product.precio }}.00</strong>
               <div
-                v-if="isRegistered"
                 class="quantity-controls"
                 :aria-label="`Cantidad de ${product.titulo}`"
               >
@@ -160,14 +169,11 @@ function getYoutubeEmbedUrl(url?: string) {
                   class="quantity-button"
                   type="button"
                   :aria-label="`Sumar una unidad de ${product.titulo}`"
-                  @click="incrementar(product.id)"
+                  @click="agregar(product.id)"
                 >
                   +
                 </button>
               </div>
-              <RouterLink v-else class="login-link" :to="{ name: 'sesion' }">
-                Inicia sesión para comprar
-              </RouterLink>
             </div>
           </div>
         </article>

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Cart from '@/views/Cart.vue'
-import { limpiarCarrito, isCartOpen, type CheckoutRequest } from '@/stores/cart'
+import { limpiarCarrito, isCartOpen, type CheckoutRequest } from '@/composables/cart'
 import { isRegistered } from '@/stores/session'
 
 type CheckoutStage = 'cart' | 'payment' | 'confirmation'
