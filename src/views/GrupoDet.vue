@@ -67,12 +67,12 @@ function getYoutubeEmbedUrl(url?: string) {
         <article
           v-for="member in artist.integrantes"
           :key="member.nombre"
-          class="member-card"
+          class="member-card group"
         >
           <div class="member-photo-wrap">
             <img
               v-if="member.foto"
-              class="member-photo"
+              class="member-photo transition duration-300 ease-out [@media(hover:hover)]:brightness-70 group-hover:brightness-100"
               :src="member.foto"
               :alt="`Foto de ${member.nombre}`"
               loading="lazy"
