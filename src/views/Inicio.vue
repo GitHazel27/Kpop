@@ -7,13 +7,13 @@
     </div>
     <div class="welcome-collage" aria-label="Algunos de tus grupos favoritos">
       <div class="collage-card collage-card-1" aria-label="Espacio para la imagen 1">
-        <span class="collage-placeholder" aria-hidden="true">Imagen 1</span>
+        <img src="https://imagenes.elpais.com/resizer/v2/72OHGHB5BFDBNHTTM4IZQO23GI.jpg?auth=a272234112fad1597e057cf61cbc4ebe6965fde92edeed6d4445a91969301058&width=1960&height=1103&focal=1462%2C469" alt="Imagen1">
       </div>
       <div class="collage-card collage-card-2" aria-label="Espacio para la imagen 2">
-        <span class="collage-placeholder" aria-hidden="true">Imagen 2</span>
+        <img src="https://cloudfront-us-east-1.images.arcpublishing.com/tvazteca/Q26G2RTM4NHGTCKYYIL7NMS3PA.jpg" alt="Imagen2">
       </div>
       <div class="collage-card collage-card-3" aria-label="Espacio para la imagen 3">
-        <span class="collage-placeholder" aria-hidden="true">Imagen 3</span>
+        <img src="https://preview.redd.it/251231-photos-stray-kids-red-carpet-photo-wall-mbc-gayo-v0-v39ju260ejag1.jpg?width=640&crop=smart&auto=webp&s=b8013b9817e0265dbb19efd65b781eea86b66197" alt="Imagen3">
       </div>
       <span class="collage-sparkle sparkle-one" aria-hidden="true">✦</span>
       <span class="collage-sparkle sparkle-two" aria-hidden="true">✦</span>
@@ -98,7 +98,7 @@ const featuredMerch = catalogo.slice(0, 4);
   position: relative;
   display: grid;
   width: calc(100% + 4rem);
-  min-height: 21rem;
+  min-height: 25rem;
   grid-template-columns: minmax(15rem, 0.9fr) minmax(0, 1.1fr);
   align-items: center;
   gap: 1.5rem;
@@ -147,7 +147,7 @@ const featuredMerch = catalogo.slice(0, 4);
 .welcome-collage {
   position: relative;
   width: 100%;
-  min-height: 16rem;
+  min-height: 21rem;
 }
 
 .collage-card {
@@ -189,23 +189,23 @@ const featuredMerch = catalogo.slice(0, 4);
 .collage-card-1 {
   top: 8%;
   left: 3%;
-  width: 48%;
-  height: 53%;
+  width: 53%;
+  height: 58%;
 }
 
 .collage-card-2 {
   top: 0;
   right: 4%;
-  width: 43%;
-  height: 48%;
+  width: 48%;
+  height: 54%;
   transform: rotate(5deg);
 }
 
 .collage-card-3 {
-  right: 13%;
+  right: 10%;
   bottom: 1%;
-  width: 51%;
-  height: 49%;
+  width: 56%;
+  height: 54%;
 }
 
 .collage-sparkle {
@@ -502,11 +502,11 @@ const featuredMerch = catalogo.slice(0, 4);
   text-align: center;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .welcome {
     min-height: auto;
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 1.25rem;
     margin-bottom: 0;
     padding: 2rem 1.25rem 1.25rem;
   }
@@ -516,7 +516,32 @@ const featuredMerch = catalogo.slice(0, 4);
   }
 
   .welcome-collage {
-    min-height: 12rem;
+    min-height: clamp(17rem, 65vw, 23rem);
+  }
+
+  .top-groups {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .group-card {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .group-image {
+    object-fit: contain;
+  }
+
+  .group-card:hover .group-image {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome {
+    gap: 0.75rem;
+    padding: 2rem 1.25rem 1.25rem;
   }
 
   .favs {
@@ -529,11 +554,6 @@ const featuredMerch = catalogo.slice(0, 4);
 
   .more-button {
     padding: 0.6rem 1rem;
-  }
-
-  .top-groups {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
   }
 
   .merch {
@@ -555,10 +575,6 @@ const featuredMerch = catalogo.slice(0, 4);
 
   .merch-card-info {
     padding: 0.75rem;
-  }
-
-  .group-card {
-    height: 13rem;
   }
 }
 

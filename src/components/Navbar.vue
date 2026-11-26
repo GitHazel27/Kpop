@@ -79,7 +79,6 @@
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { cartItemCount, isCartOpen } from '@/composables/cart'
-// Para cambiar a Spotify: import MusicPlayer from './MusicPlayerSpotify.vue'
 import MusicPlayer from './MusicPlayerYouTube.vue'
 const route = useRoute();
 const showFavs = ref(false)
