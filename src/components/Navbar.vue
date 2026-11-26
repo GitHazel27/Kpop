@@ -2,6 +2,7 @@
   <header class="site-header">
     <nav class="navbar" aria-label="Navegación principal">
       <RouterLink class="brand" to="/">K-POP</RouterLink>
+      <MusicPlayer />
       <input class="menu-toggle-input" id="menu-toggle" type="checkbox" aria-label="Abrir o cerrar menú">
         <label class="menu-toggle" for="menu-toggle" aria-hidden="true">☰</label>
           <div class="nav-menu">
@@ -77,7 +78,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { cartItemCount, isCartOpen } from '@/composables/cart'
+import { cartItemCount, isCartOpen } from '@/stores/cart'
 const route = useRoute();
 const showFavs = ref(false)
 import {group} from '@/data/grupos';
@@ -88,7 +89,9 @@ const messages = [
   'Envíos gratis en compras mayores a $999.00',
   'Nuevos productos cada semana, ¡no te los pierdas!',
 ]
-
+// Se agrega una copia del primer mensaje al final para que la banda
+// se deslice siempre hacia la izquierda y el ciclo se vea continuo.
+// La animación está en el CSS (@keyframes slide).
 const slides = [...messages, messages[0]]
 </script>
 
